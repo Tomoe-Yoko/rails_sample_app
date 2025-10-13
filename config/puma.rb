@@ -41,3 +41,9 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
+
+# Windowsで自動リスタートを無効化を追記
+if Gem.win_platform?
+  puts "Windows detected: disabling Puma restart hooks"
+  Puma::Launcher::RESTARTABLE = false rescue nil
+end
