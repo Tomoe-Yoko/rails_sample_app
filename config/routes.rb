@@ -7,9 +7,5 @@ Rails.application.routes.draw do
   get '/contact', to: 'static_pages#contact'
   get '/helf', to: 'static_pages#helf'
   get '/signup',to: 'users#new'
-  # get 'login',to: 'static_pages#login'
-  # get 'static_pages/home'
-  # get 'static_pages/help'
-  # get 'static_pages/about'
-  # get 'static_pages/contact'
+ resources :users
 end
