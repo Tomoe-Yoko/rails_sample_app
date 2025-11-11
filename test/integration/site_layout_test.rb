@@ -13,7 +13,6 @@ class SiteLayoutTest < ActionDispatch::IntegrationTest
     assert_select 'a[href=?]', help_path  #自動的にはてなマーク "?" をabout_pathに置換
     assert_select 'a[href=?]', about_path
     assert_select 'a[href=?]', contact_path
-    assert_select 'a[href=?]', helf_path
     get contact_path
     assert_select 'title', full_title('Contact')
     get signup_path

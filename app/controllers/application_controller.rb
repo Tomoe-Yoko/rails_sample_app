@@ -1,6 +1,4 @@
 class ApplicationController < ActionController::Base
-
-  def hello
-    render html: "hello, world!"
-  end
+  include SessionsHelper
+# ログイン機構はあらゆる場面で使うことになる、全コントローラの親クラスであるここに自動生成されたセッション用のヘルパーを読み込ませ、どのコントローラからでもログイン関連のメソッドを呼び出せるようにしてみます
 end
