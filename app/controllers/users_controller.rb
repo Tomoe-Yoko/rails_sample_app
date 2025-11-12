@@ -21,9 +21,13 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit
+    @user = User.find(params[:id])
+  end
+
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation) # 「許可したデータだけを取り出す」Railsの安全機構
+    params.require(:user).permit(:name, :email, :password, :password_confirmation) # Strong Parametersを定義するメソッド
   end
 end
