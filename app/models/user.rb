@@ -1,12 +1,13 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token # 9章で使用する仮想属性　外部から参照や変更をする
+    attr_accessor :remember_token, :activation_token# 仮想属性（attr_accessorで定義）なので、DBには保存されない
 
-  before_save { self.email = email.downcase } # 保存前にメールアドレスを小文字に変換 右式のselfを省略できる
-  validates :name, presence: true, length: { maximum: 50 }
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  validates :email, presence: true, length: { maximum: 255 },
-                    format: { with: VALID_EMAIL_REGEX },
-                    uniqueness: true
+    before_save   :downcase_email
+    before_create :create_activation_digest
+    validates :name, presence: true, length: { maximum: 50 }
+    VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+    validates :email, presence: true, length: { maximum: 255 },
+                      format: { with: VALID_EMAIL_REGEX },
+                      uniqueness: true
   has_secure_password
   validates :password, presence: true, length: { minimum: 8 },allow_nil: true
 
@@ -49,4 +50,17 @@ class User < ApplicationRecord
   def forget
     update_attribute(:remember_digest, nil)
   end
+
+private
+
+    # メールアドレスをすべて小文字にする
+    def downcase_email
+      self.email = email.downcase
+    end
+
+    # 有効化トークンとダイジェストを作成および代入する
+    def create_activation_digest
+      self.activation_token  = User.new_token
+      self.activation_digest = User.digest(activation_token)
+    end
 end
