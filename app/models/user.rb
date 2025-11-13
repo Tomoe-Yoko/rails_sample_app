@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token, :activation_token , :reset_token# 仮想属性（attr_accessorで定義）なので、DBには保存されない
+  attr_accessor :remember_token, :activation_token, :reset_token # 仮想属性（attr_accessorで定義）なので、DBには保存されない
 
   before_save   :downcase_email
   before_create :create_activation_digest
@@ -54,8 +54,7 @@ class User < ApplicationRecord
 
   # アカウントを有効にする
   def activate
-   update_columns(activated: true, activated_at: Time.zone.now)
-
+    update_columns(activated: true, activated_at: Time.zone.now)
   end
 
   # 有効化用のメールを送信する
@@ -66,8 +65,10 @@ class User < ApplicationRecord
   # パスワード再設定の属性を設定する
   def create_reset_digest
     self.reset_token = User.new_token
-    update_attribute(:reset_digest,  User.digest(reset_token))
-    update_attribute(:reset_sent_at, Time.zone.now)
+    update_columns(reset_digest: User.digest(reset_token),
+                   reset_sent_at: Time.zone.now)
+    # update_attribute(:reset_digest,  User.digest(reset_token))
+    # update_attribute(:reset_sent_at, Time.zone.now)
   end
 
   # パスワード再設定のメールを送信する
@@ -75,11 +76,10 @@ class User < ApplicationRecord
     UserMailer.password_reset(self).deliver_now
   end
 
-
-# パスワード再設定リンクが期限切れかどうかを判定　reset_sent_atより早い時刻　例14:00<16:00
-def password_reset_expired?
-  reset_sent_at < 2.hours.ago
-end
+  # パスワード再設定リンクが期限切れかどうかを判定　reset_sent_atより早い時刻　例14:00<16:00
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
+  end
 
   private
 
@@ -93,5 +93,4 @@ end
     self.activation_token  = User.new_token
     self.activation_digest = User.digest(activation_token)
   end
-
 end
