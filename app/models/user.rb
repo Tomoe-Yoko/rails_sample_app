@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :microposts
   attr_accessor :remember_token, :activation_token, :reset_token # 仮想属性（attr_accessorで定義）なので、DBには保存されない
 
   before_save   :downcase_email
