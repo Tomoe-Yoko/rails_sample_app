@@ -11,7 +11,6 @@ class StaticPagesController < ApplicationController
   def contact
   end
   
-  def helf
-  end
+
 
 end
