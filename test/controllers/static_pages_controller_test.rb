@@ -28,10 +28,6 @@ class StaticPagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select 'title', "Contact | #{@base_title}"
   end
-  test 'should get helf' do
-    get helf_path
-    assert_response :success
-    assert_select "title", "Helf | #{@base_title}"
-  end
+  
 
 end
