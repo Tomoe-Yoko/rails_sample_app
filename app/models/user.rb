@@ -76,6 +76,11 @@ class User < ApplicationRecord
   end
 
 
+# パスワード再設定リンクが期限切れかどうかを判定　reset_sent_atより早い時刻　例14:00<16:00
+def password_reset_expired?
+  reset_sent_at < 2.hours.ago
+end
+
   private
 
   # メールアドレスをすべて小文字にする
@@ -89,5 +94,4 @@ class User < ApplicationRecord
     self.activation_digest = User.digest(activation_token)
   end
 
- 
 end
