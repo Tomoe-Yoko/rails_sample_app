@@ -5,7 +5,7 @@ require "minitest/reporters"
 Minitest::Reporters.use!
 
 class ActiveSupport::TestCase
-  parallelize(workers: 1)
+  parallelize(workers: 1)#テストの並列実行を制御する設定
 
   # Run tests in parallel with specified workers
   # parallelize(workers: :number_of_processors, with: :threads)
