@@ -49,6 +49,11 @@ class UsersController < ApplicationController
     redirect_to users_url, status: :see_other
   end
 
+  def show
+    @user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page],per_page: 5)
+  end
+
   private
 
   def user_params
