@@ -49,6 +49,11 @@ class UsersController < ApplicationController
     redirect_to users_url, status: :see_other
   end
 
+  def show
+    @user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page],per_page: 5)
+  end
+
   private
 
   def user_params
@@ -57,14 +62,7 @@ class UsersController < ApplicationController
 
   # beforeフィルタ
 
-  # ログイン済みユーザーかどうか確認
-  def logged_in_user
-    return if logged_in?
-
-    store_location # アクセスしようとしたURLを保存
-    flash[:danger] = 'Please log in.'
-    redirect_to login_url, status: :see_other
-  end
+  
 
   # 正しいユーザーかどうか確認
   def correct_user
