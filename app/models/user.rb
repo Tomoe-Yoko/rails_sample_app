@@ -95,7 +95,17 @@ class User < ApplicationRecord
   def password_reset_expired?
     reset_sent_at < 2.hours.ago
   end
- # 14章 フォロー機能のメソッド
+
+  # ユーザーのステータスフィードを返す
+  def feed
+    following_ids = "SELECT followed_id FROM relationships
+                     WHERE  follower_id = :user_id"
+    Micropost.where("user_id IN (#{following_ids})
+                     OR user_id = :user_id", user_id: id)
+             .includes(:user, image_attachment: :blob)# preload(:comments) # N+1問題対策
+  end
+
+  # 14章 フォロー機能のメソッド
   def follow(other_user)
     active_relationships.create(followed_id: other_user.id)
   end
@@ -107,6 +117,7 @@ class User < ApplicationRecord
   def following?(other_user)
     following.include?(other_user)
   end
+
   private
 
   # メールアドレスをすべて小文字にする
@@ -119,6 +130,4 @@ class User < ApplicationRecord
     self.activation_token  = User.new_token
     self.activation_digest = User.digest(activation_token)
   end
-
- 
 end
